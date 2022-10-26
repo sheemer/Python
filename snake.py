@@ -6,6 +6,10 @@ import random
 from turtle import Screen
 import pygame
 import os 
+import requests
+
+file = open("highscore.txt","a+")
+clock = pygame.time.Clock()
 snake_speed = 15
 
 # defining colors
@@ -15,15 +19,21 @@ red = pygame.Color(255, 0, 0)
 green = pygame.Color(0, 255, 0)
 blue = pygame.Color(0, 0, 255)
 
+
+img_data = requests.get('https://i.redd.it/wq6nqm0omzv91.png').content
+with open('wq6nqm0omzv91.png', 'wb') as handler:
+    handler.write(img_data)
+
 pygame.init()
 screen = pygame.display.set_mode()
 x, y = screen.get_size()
 window_x = x
 window_y = y
 game_window = pygame.display.set_mode((window_x,window_y), pygame.FULLSCREEN)
-bg_img = pygame.image.load('C:\\Users\\sheem\\OneDrive\Pictures\\bw1ryn93h0l91.png')
+bg_img = pygame.image.load('wq6nqm0omzv91.png')
 bg_img = pygame.transform.smoothscale(bg_img, game_window.get_size())
-
+#/Users//jonny5//Pictures//wq6nqm0omzv91.png
+#https://i.redd.it/wq6nqm0omzv91.png
 fps = pygame.time.Clock()
 
 snake_position = [100,50]
@@ -49,7 +59,7 @@ def show_score(choice, color, font, size):
     game_window.blit(score_surface, score_rect)
 
        
-#open("highscore.txt","w+")
+
 def game_over():
     my_font = pygame.font.SysFont('times new roman', 50)
     game_over_surface = my_font.render('Score is : ' + str(score) )
@@ -61,8 +71,29 @@ def game_over():
     pygame.quit()
     quit()
 
-#else:
- #   open("highscore.txt","w+")
+def text_objects(text, font):
+    textSurface = font.render(text, True, black)
+    return textSurface, textSurface.get_rect()
+
+def startscreen():
+    
+    startscreen = True
+
+    while startscreen:
+        for event in pygame.event.get():
+            print(event)
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        bg_img.fill(white)
+        largewords = pygame.font.Font('freesansbold.ttf',115)
+        TextSurf, TextRect = text_objects("Snake", largewords)
+        TextRect.center = ((window_x),(window_y))
+        game_window.blit(TextSurf, TextRect)
+        pygame.display.update()
+        clock.tick(15)
+
     
 highscorefile = open("highscore.txt", 'r')
 highscore = highscorefile.read()
